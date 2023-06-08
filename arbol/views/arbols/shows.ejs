@@ -1,0 +1,238 @@
+<% layout('./layouts/boilerplate') %>
+    <link rel="stylesheet" type="text/css" href="../stars.css" />
+    <link rel="stylesheet" type="text/css" href="../app.css" />
+
+    <!-- Button trigger modal -->
+    <!-- <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#exampleModal">
+  Launch demo modal
+</button> -->
+    <script>
+        const arbol = <%- JSON.stringify(arbol)%>
+    </script>
+
+    <div class="row" id="mobile">
+        <div class="col-6">
+            <!-- <div id="map"></div> -->
+            <div id="arbolcarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <% arbol.images.forEach((img,i) => { %>
+                        <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
+                            <img src="<%= img.url %>" class="d-block w-100" alt="">
+
+                        </div>
+                        <% }) %>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#arbolcarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">atras</span>
+      </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#arbolcarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">siguiente</span>
+      </button>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <%= arbol.title %>
+                    </h3>
+                    <p class="card-text">
+                        <%= arbol.description %>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Located @
+                        <%= arbol.location %>
+                    </li>
+                    <li class="list-group-item"> $
+                        <%= arbol.price %>/night</li>
+                    <li class="list-group-item"> <b>Árbol subido por <%= arbol.author.username %></b></li>
+                </ul>
+
+                <% if(currentUser && arbol.author.equals(currentUser._id)) { %>
+                    <div class="card-body">
+                        <a href="/hotels/<%= arbol._id %>/edit" class="card-link btn btn-warning">Editar</a
+        >
+        <!-- <a href="" class="card-link btn btn-primary">
+          Manage Photos
+        </a> -->
+                        <form class="d-inline" action="" method="">
+                            <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Eliminar</button>
+                        </form>
+                    </div>
+                    <% } %>
+                        <br>
+                        <a href="/arbols">Ir a la lista</a>
+
+            </div>
+        </div>
+        <% if(currentUser) { %>
+            <div class="col-6">
+                <h2>Ver</h2>
+                <h6>Clickea en una estrella</h6>
+                <form action="/arbols/<%= arbol._id %>/reviews" method="POST" class="mb-3 validated-form" novalidate>
+                    <div class="mb-3">
+                        <!-- <label for="rating">Rating</label>
+          <input
+            class="form-range"
+            type="range"
+            min="1"
+            max="5"
+            name="review[rating]"
+            id="rating"
+          />
+        </div> -->
+
+                        <fieldset class="starability-coinFlip" id="rating">
+                            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                            <label for="first-rate1" title="Terrible">1 estrellas</label>
+                            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                            <label for="first-rate2" title="Not good">2 estrellas</label>
+                            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                            <label for="first-rate3" title="Average">3 estrellas</label>
+                            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                            <label for="first-rate4" title="Very good">4 estrellas</label>
+                            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                            <label for="first-rate5" title="Amazing">5 estrellas</label>
+                        </fieldset>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="body">ver</label>
+                            <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
+                            <div class="valid-feedback">listo!</div>
+                        </div>
+                        <button class="btn btn-success cow">enviar</button>
+                </form>
+                <br>
+
+                <% for(let review of hotel.reviews) { %>
+                    <div class="card mb-3">
+                        <div class="card-body" id="reviewBox">
+
+                            <h5 class="card-title">
+                                <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="" style="width:45px;height:50px;">
+                                <b><%= review.author.username %> </b> </h5>
+
+                            <h6 class="card-text">
+                                <p class="starability-result" data-rating="<%= review.rating %>">
+                                    Rated:
+                                    <%= review.body %> stars
+                                </p>
+                            </h6>
+                            <h6 class="card-text">
+                                <%= review.body %>
+                            </h6>
+
+                            <% if(currentUser && review.author.equals(currentUser._id)) { %>
+                                <form action="" method="">
+                                    <button class="btn btn-sm btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal<%= review._id %>">eliminar</button>
+                                </form>
+                                <% } %>
+
+                        </div>
+                    </div>
+                    <% } %>
+                        </div>
+                        <% } else {%>
+                            <% if(arbol.reviews <= 0){ %>
+
+                                <div class="col-6">
+                                    <h2>no hay vistas</h2>
+                                    <form action="/login" method="get">
+                                        <button class="btn btn-sm btn-secondary" type="button submit">Ingresa para poder observar</button>
+                                    </form>
+                                    <!-- <p> <a href=/hotels/<%= hotel.id %>/reviews> Log-in to leave a review</a></p> -->
+
+
+                                    <% } else { %>
+
+                                        <div class="col-6">
+                                            <form action="/login" method="get">
+                                                <button class="btn btn-m btn-secondary cow" type="button submit">Ingresa para observar los árboles</button>
+                                            </form>
+                                            <% for(let review of arbol.reviews) { %>
+                                                <div class="card mb-3">
+                                                    <div class="card-body" id="reviewBox">
+                                                        <h5 class="card-title">
+                                                            <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="" style="width:45px;height:50px;">
+                                                            <b><%= review.author.username %> </b> </h5>
+
+                                                        <p class="card-text">
+                                                            <p class="starability-result" data-rating="<%= review.rating %>">
+                                                                Rated:
+                                                                <%= review.rating %> stars
+                                                            </p>
+                                                        </p>
+                                                        <p class="card-text">
+                                                            <%= review.body %>
+                                                        </p>
+
+
+                                                        <% if(currentUser && review.author.equals(currentUser._id)) { %>
+                                                            <form action="" method="">
+                                                                <button class="btn btn-sm btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal<%= review._id %>">eliminar</button>
+                                                            </form>
+                                                            <% } %>
+
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                                        </div>
+                                        <% } %>
+
+
+                                            <!-- <div class="col-6">
+    <h2>This hotel has no reviews yet</h2>
+    <p> <a href="/login"> Log-in to leave a review</a></p> -->
+                                            <% } %>
+                                </div>
+            </div>
+    </div>
+
+    <!-- Modal -->
+    <% for(let review of arbol.reviews) { %> %>
+
+        <div class="modal fade" id="exampleModal<%= review._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">aviso!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">estas seguro que deseas eliminar?</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <form action="/hotels/<%=hotel._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
+                            <button type="button submit" class="btn btn-danger">Yes, eliminar</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+            <!-- ////////////////////////////////////////// -->
+
+            <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">aviso!</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">¿deseas eliminarlo?</div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <form action="/hotels/<%= hotel._id %>?_method=DELETE" method="POST">
+                                <button type="button submit" class="btn btn-danger">Yes, eliminar</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script src="/showPageMap.js">
+            </script>

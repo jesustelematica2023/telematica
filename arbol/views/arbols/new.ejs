@@ -1,0 +1,48 @@
+<% layout('./layouts/boilerplate') %>
+    <div class="row">
+        <h1 class="text-center">Nuevo árbol</h1>
+        <div class="col-6 offset-3">
+            <form action="/arbols" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Nombre:</label>
+                    <input class="form-control" type="text" id="title" name="arbol[title]" required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="location">localicación:</label>
+                    <input class="form-control" type="text" id="location" name="arbol[location]" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">añadir imagen</label>
+                    <input class="form-control" type="file" id="image" name="image" multiple />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="description">Descriçión</label>
+                    <textarea class="form-control" type="text" id="description" name="arbol[description]" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="price">Puntuación
+          <div class="input-group">
+            <span class="input-group-text"></span>
+            <input
+              type="text"
+              class="form-control"
+             
+              id="price"
+              name="arbol[price]"
+              required
+            />
+            <span class="input-group-text"></span>
+          </div>
+        </label>
+                </div>
+
+                <button class="btn btn-success mb-3">Añadir</button>
+            </form>
+            <div>
+                <a href="/arbols">atras</a>
+            </div>
+        </div>
+    </div>

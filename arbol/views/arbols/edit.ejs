@@ -1,0 +1,65 @@
+<% layout('./layouts/boilerplate') %>
+
+    <div class="row">
+        <h1 class="text-center">Editar Arbol</h1>
+        <div class="col-6 offset-3">
+            <form action="/arbols/<%= arbol._id %>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Nombre del arbol:</label>
+                    <input class="form-control" type="text" id="title" name="arbol[title]" value="<%= arbol.title %>" required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="location">Localización:</label>
+                    <input class="form-control" type="text" id="location" name="arbol[location]" value="<%= arbol.location %>" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Añadir imagen</label>
+                    <input class="form-control" type="file" id="image" name="image" multiple />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Descripción</label>
+                    <textarea class="form-control" type="text" id="description" name="arbol[description]" required>
+<%= arbol.descripción %></textarea
+        >
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="price"
+          >Puntuación 
+          <div class="input-group">
+            <span class="input-group-text"></span>
+            <input
+              type="text"
+              class="form-control"
+             
+              id="price"
+              name="arbol[price]"
+              value="<%= arbol.price %>"
+              required
+            />
+            <span class="input-group-text"></span>
+          </div>
+        </label>
+      </div>
+      <div class="mb-3">
+        <% arbol.images.forEach((img,i) => { %>
+        <img src="<%= img.thumbnail%>" class="img-thumbnail" alt="" />
+        <div class="form-check-inline">
+          <input
+            type="checkbox"
+            id="image-<%= i %>"
+            name="deleteImages[]"
+            value="<%= img.filename %>"
+          />
+        </div>
+        <label for="">Eliminar</label>
+        <% }) %>
+      </div>
+      <button class="btn btn-success mb-3">Actualizar Arbol</button>
+    </form>
+    <div>
+      <a href="/arbols/<%= arbol._id %>">Atras</a>
+    </div>
+  </div>
+</div>

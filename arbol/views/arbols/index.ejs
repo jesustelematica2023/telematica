@@ -1,0 +1,48 @@
+<% layout('./layouts/boilerplate') %>
+    <link rel="stylesheet" type="text/css" href="app.css" />
+
+    <div id="cluster-map"></div>
+    <h1>Lista de todos</h1>
+    <div>
+        <a class="btn" href="/arbols/new">añadir nuevo </a>
+    </div>
+    <% for (let arbol of arbols) {%>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <% if(arbol.images.length > 0) {%>
+                        <img class="img-fluid" alt="" src="<%= arbol.images[0].url %>" style="width: 100%; height: 300px" />
+                        <% } else { %>
+                            <img class="img-fluid" alt="" src="https://th.bing.com/th/id/R.65f4fc27ad83bb1c11a71486ce57a7af?rik=sJJS8JELYR6SIw&pid=ImgRaw&r=0" style="width: 500px; height: 300px" />
+                            <% } %>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= arbol.title %>
+                        </h5>
+                        <p class="card-text">
+                            <%= arbol.description %>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+            
+          
+        </p>
+        <a
+          class="btn"
+          style="background-color: #073653; color: white"
+          href="/arbols/<%= arbol._id %> "
+          >Observar <%= arbol.title %></a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+<%}%>
+
+<script>
+  const arbols = {features: <%- JSON.stringify(arbols)%>}
+</script>
+
+<script src="/clusterMap.js"></script>
